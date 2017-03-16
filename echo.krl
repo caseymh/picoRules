@@ -3,6 +3,15 @@ ruleset echo{
         shares hello, message
     }
     
+    global {
+        __testing = { 
+            "events": [ 
+                { "domain": "echo", "type": "hello"}
+                , { "domain": "echo", "type": "message", "attrs": ["input"] } 
+                ]
+            }
+    }
+    
     rule hello{
         select when echo hello
         send_directive("say") with
