@@ -6,7 +6,7 @@ ruleset track_trips{
     global {
         __testing = { 
             "events": [ 
-                { "domain": "echo", "type": "message", "attrs": ["message"] } 
+                { "domain": "echo", "type": "message", "attrs": ["milage"] } 
                 ]
             }
     }
