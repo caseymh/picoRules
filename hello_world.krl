@@ -17,8 +17,12 @@ A first ruleset for the Quickstart
     __testing = { "queries": [ { "name": "hello", "args": [ "obj" ] },
                            { "name": "__testing" } ],
               "events": [ { "domain": "echo", "type": "hello",
-                            "attrs": [ "name" ] }, { "domain": "hello", "type": "name", "attrs": [ "name" ] } ]
+                            "attrs": [ "name" ] }
+                            , { "domain": "hello", "type": "name", "attrs": [ "name" ] } 
+                            , { "domain": "hello", "type" : "clear" }]
             }
+            
+  clear_name = { "_0": { "name": { "first": "GlaDOS", "last": "" } } }
   }
   
 rule hello_world {
@@ -42,4 +46,10 @@ rule store_name {
   }
 }
   
+rule clear_names {
+  select when hello clear
+  always {
+    ent:name := clear_name
+  }
+}
 }
