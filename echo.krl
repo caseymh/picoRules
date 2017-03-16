@@ -1,6 +1,6 @@
 ruleset echo{
     meta {
-        shares hello, message
+        shares hello, message, __testing
     }
     
     global {

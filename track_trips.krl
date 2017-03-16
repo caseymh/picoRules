@@ -1,6 +1,6 @@
 ruleset track_trips{
     meta {
-        shares message
+        shares message, __testing
     }
     
     global {
