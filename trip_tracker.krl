@@ -1,6 +1,6 @@
-ruleset track_trips{
+ruleset trip_tracker{
     meta {
-        shares process_trip, __testing
+        shares message, __testing
     }
     
     global {
