@@ -1,18 +1,18 @@
 ruleset trip_tracker{
     meta {
-        shares message, __testing
+        shares process_trip, __testing
     }
     
     global {
         __testing = { 
             "events": [ 
-                { "domain": "echo", "type": "message", "attrs": ["milage"] } 
+                { "domain": "car", "type": "new_trip"} 
                 ]
             }
     }
     
     rule process_trip{
-        select when echo message milage re#(.*)# setting(mile);
+        select when car new_trip 
         send_directive("trip") with
         trip_length = mile
     }
