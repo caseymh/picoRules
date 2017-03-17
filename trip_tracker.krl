@@ -13,5 +13,7 @@ ruleset trip_tracker{
     
     rule process_trip{
         select when car new_trip milage re#(.*)# setting(mile);
+        send_directive("trip") with
+        trip_length = mile
     }
 }
