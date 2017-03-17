@@ -13,7 +13,7 @@ ruleset trip_tracker{
     
     rule process_trip{
         select when car new_trip milage re#(.*)# setting(mile);
-         event:attr("milage").klog("milage passed in: ")
+        pre{ tmp = event:attr("milage").klog("milage passed in: ")}
         send_directive("trip") with
         trip_length = mile
     }
