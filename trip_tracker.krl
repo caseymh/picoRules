@@ -9,12 +9,37 @@ ruleset trip_tracker{
                 { "domain": "car", "type": "new_trip"} 
                 ]
             }
+        
+        long_trip = 15
     }
     
     rule process_trip{
         select when car new_trip milage re#(.*)# setting(mile);
-        pre{ tmp = event:attr("milage").klog("milage passed in: ")}
         send_directive("trip") with
         trip_length = mile
+        fired{
+            raise explicit event "trip_processed" 
+             attributes event:attrs()
+        }
+    }
+    
+    rule find_long_trips{
+        select when explicit trip_processed where milage.as("Number") > long_trip
+        
+        pre { 
+            tmp = event:attr("milage").klog("find_long_trips milage: ")
+        }
+        fired{
+            raise explicit event "found_long_trip"
+            attributes event:attrs()
+        }
+    }
+    
+    rule found_long_trip{
+        select when explicit trip_processed 
+        pre { 
+            tmp = event:attrs().klog("found_long_trip attributes: ")
+        }
+        
     }
 }
