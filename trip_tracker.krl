@@ -36,7 +36,7 @@ ruleset trip_tracker{
     }
     
     rule found_long_trip{
-        select when explicit found_long_trip 
+        select when explicit trip_processed 
         pre { 
             tmp = event:attrs().klog("found_long_trip attributes: ")
         }
