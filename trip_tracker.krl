@@ -1,5 +1,6 @@
 ruleset trip_tracker{
     meta {
+        logging on
         shares process_trip, __testing
     }
     
