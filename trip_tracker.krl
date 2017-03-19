@@ -30,6 +30,7 @@ ruleset trip_tracker{
             tmp = event:attr("milage").klog("find_long_trips milage: ")
         }
         fired{
+            tmp = event:attr("milage").klog("find_long_trips milage: ")
             raise explicit event "found_long_trip"
             attributes event:attrs()
         }
