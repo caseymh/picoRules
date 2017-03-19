@@ -32,7 +32,8 @@ ruleset trip_tracker{
         fired{
             raise explicit event "found_long_trip"
             attributes event:attrs()
-        }
+        } else{
+            klog("Not fired")}
     }
     
     rule found_long_trip{
