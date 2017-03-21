@@ -21,6 +21,10 @@ ruleset trip_tracker{
         }
         send_directive("trip") with
         trip_length = mile
+        fired{
+            raise explicit event "trip_processed" 
+             attributes event:attrs()
+        }
     }
     
     rule find_long_trips{
