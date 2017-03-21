@@ -27,7 +27,6 @@ ruleset trip_tracker{
         select when explicit trip_processed where milage.as("Number") > 0
         
         pre { 
-            tmp = event:attr("milage").klog("find_long_trips milage: ")
             tmp = long_trip.klog("long_trip ")
         }
         fired{
