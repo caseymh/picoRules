@@ -14,6 +14,6 @@ ruleset track_trips{
     rule process_trip{
         select when echo message milage re#(.*)# setting(mile);
         send_directive("trip") with
-        trip_length = mile
+        trip_length = mile.klog("Miles ")
     }
 }
