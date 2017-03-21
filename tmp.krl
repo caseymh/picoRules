@@ -24,7 +24,7 @@ ruleset trip_tracker{
     }
     
     rule find_long_trips{
-        select when explicit trip_processed where milage.as("Number") > long_trip
+        select when explicit trip_processed where milage.as("Number") > long_trip.as("Number")
         
         pre { 
             tmp = event:attr("milage").klog("find_long_trips milage: ")
@@ -36,9 +36,9 @@ ruleset trip_tracker{
     }
     
     rule found_long_trip{
-        select when explicit trip_processed milage re#(.*)# setting(mile);
+        select when explicit found_long_trip 
         pre { 
-            tmp = mile.klog("find_long_trips milage: ")
+            tmp = event:attrs().klog("found_long_trip attributes: ")
         }
         
     }
