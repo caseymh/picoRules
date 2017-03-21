@@ -1,6 +1,6 @@
 ruleset trip_tracker{
     meta {
-        shares process_trip, __testing, long_trip
+        shares __testing, long_trip
     }
     
     global {
