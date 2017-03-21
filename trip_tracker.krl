@@ -1,7 +1,7 @@
 ruleset trip_tracker{
     meta {
         logging on
-        shares process_trip, __testing
+        shares process_trip, __testing, new_trip
     }
     
     global {
@@ -17,7 +17,7 @@ ruleset trip_tracker{
     rule process_trip{
         select when car new_trip milage re#(.*)# setting(mile);
         pre { 
-            tmp = attrr("milage").klog("Processing")
+            tmp = attr("milage").klog("Processing")
         }
         send_directive("trip") with
         trip_length = mile
