@@ -1,7 +1,7 @@
 ruleset trip_tracker{
     meta {
         logging on
-        shares process_trip, __testing
+        shares process_trip, __testing, find_long_trips, found_long_trip
     }
     
     global {
