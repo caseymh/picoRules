@@ -1,6 +1,6 @@
 ruleset trip_store{
     meta {
-        shares __testing , long_trips, short_trips
+        shares __testing,trips, long_trips, short_trips
         provides trips, long_trips, short_trips
     }
     
