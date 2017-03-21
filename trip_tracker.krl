@@ -18,7 +18,8 @@ ruleset trip_tracker{
         select when car new_trip milage re#(.*)# setting(mile);
         pre{
             attrs = event:attrs().klog("new_trip attrs: ")
-            attrs = attrs.append([{"timestamp": time:now()}]).klog("attrs ")
+            time = time:now()
+            attrs = attrs.put(["timestamp"] , [time]).klog("attrs ")
         }
         send_directive("trip") with
         trip_length = mile

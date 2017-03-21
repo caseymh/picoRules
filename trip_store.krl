@@ -5,7 +5,9 @@ ruleset trip_store{
     }
     
     global {
-        __testing = { 
+        __testing = { "queries": [ { "name": "trips" },
+                           { "name": "long_trips" } ,
+                           { "name": "short_trips"}],
             "events": [ 
                 { "domain": "car", "type": "new_trip"} 
                 ]
