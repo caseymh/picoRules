@@ -1,7 +1,7 @@
 ruleset trip_tracker{
     meta {
         logging on
-        shares process_trip, __testing, find_long_trips, found_long_trip, tst
+        shares process_trip, __testing, find_long_trips, found_long_trip
     }
     
     global {
@@ -17,7 +17,7 @@ ruleset trip_tracker{
     rule process_trip{
         select when car new_trip milage re#(.*)# setting(mile);
         pre { 
-            tmp = attr("milage").klog("Processing")
+            tmp = attrr("milage").klog("Processing")
         }
         send_directive("trip") with
         trip_length = mile
@@ -27,15 +27,8 @@ ruleset trip_tracker{
         }
     }
     
-    rule tst{
-        select when explicit trip_processed milage re#(.*)# setting(mile);
-        pre{
-            tmp = attr("milage").klog("trip processed")
-        }
-    }
-    
     rule find_long_trips{
-        select when explicit trip_processed where milage.as("Number") > long_trip
+        select when explicit trip_processed where milage.as("Number") > long_trip;
         
         pre { 
             tmp = event:attr("milage").klog("find_long_trips milage: ")
