@@ -1,19 +1,21 @@
 ruleset trip_tracker{
     meta {
-        logging on
-        shares process_trip
+        shares __testing, long_trip
     }
     
     global {
+        __testing = { 
+            "events": [ 
+                { "domain": "car", "type": "new_trip"} 
+                ]
+            }
         
-        long_trip = 15
+        long_trip = function(){val = 15;
+        val}
     }
     
     rule process_trip{
         select when car new_trip milage re#(.*)# setting(mile);
-        pre { 
-            tmp = attr("milage").klog("Processing")
-        }
         send_directive("trip") with
         trip_length = mile
         fired{
@@ -23,22 +25,23 @@ ruleset trip_tracker{
     }
     
     rule find_long_trips{
-        select when explicit trip_processed where milage.as("Number") > long_trip
+        select when explicit trip_processed milage re#(.*)# setting(mile);
         
         pre { 
-            tmp = event:attr("milage").klog("find_long_trips milage: ")
+            tmp = mile.klog("Milage: ")
+            tmp = (mile > long_trip()).klog("Is longest trip: ")
+            tmp = long_trip().klog("long_trip: ")
         }
         fired{
             raise explicit event "found_long_trip"
-            attributes event:attrs()
-        } else{
-            klog("Not fired")}
+            attributes event:attrs() if (mile > long_trip())
+        }
     }
     
     rule found_long_trip{
         select when explicit found_long_trip 
         pre { 
-            tmp = event:attrs().klog("found_long_trip attributes: ")
+            tmp = event:attr("milage").klog("found_long_trip milage: ")
         }
         
     }

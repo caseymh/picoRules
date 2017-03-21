@@ -10,7 +10,8 @@ ruleset trip_tracker{
                 ]
             }
         
-        long_trip = 15
+        long_trip = function(){val = 15;
+        val}
     }
     
     rule process_trip{
@@ -24,21 +25,23 @@ ruleset trip_tracker{
     }
     
     rule find_long_trips{
-        select when explicit trip_processed where milage.as("Number") > 0
+        select when explicit trip_processed milage re#(.*)# setting(mile);
         
         pre { 
-            tmp = long_trip.klog("long_trip ")
+            tmp = mile.klog("Milage: ")
+            tmp = (mile > long_trip()).klog("Is longest trip: ")
+            tmp = long_trip().klog("long_trip: ")
         }
         fired{
             raise explicit event "found_long_trip"
-            attributes event:attrs()
+            attributes event:attrs() if (mile > long_trip())
         }
     }
     
     rule found_long_trip{
         select when explicit found_long_trip 
         pre { 
-            tmp = event:attrs().klog("found_long_trip attributes: ")
+            tmp = event:attr("milage").klog("found_long_trip milage: ")
         }
         
     }
