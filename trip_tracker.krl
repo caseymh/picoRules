@@ -6,7 +6,7 @@ ruleset trip_tracker{
     global {
         __testing = { 
             "events": [ 
-                { "domain": "car", "type": "new_trip"} 
+                { "domain": "car", "type": "new_trip", "attrs": [ "milage" ]} 
                 ]
             }
         
