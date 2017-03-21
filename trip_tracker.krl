@@ -24,8 +24,7 @@ ruleset trip_tracker{
         trip_length = mile
         fired{
             raise explicit event "trip_processed" 
-             attributes event:attrs() 
-             and "timestamp" = time:now()
+             attributes attrs
         }
     }
     
