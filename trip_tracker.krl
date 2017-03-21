@@ -1,17 +1,10 @@
 ruleset trip_tracker{
     meta {
         logging on
-        shares process_trip, __testing
+        shares process_trip
     }
     
     global {
-        __testing = { 
-            "events": [ 
-                { "domain": "car", "type": "new_trip"} 
-                    , {"domain": "explicit", "type": "trip_processed"}
-                    , {"domain": "explicit", "type": "found_long_trip"}
-                ]
-            }
         
         long_trip = 15
     }
