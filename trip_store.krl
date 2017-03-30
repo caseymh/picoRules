@@ -10,6 +10,7 @@ ruleset trip_store{
                            { "name": "short_trips"}],
             "events": [ 
                 { "domain": "car", "type": "new_trip"} 
+                , {"domain": "explicit", "type": "car_report", "attrs":["vehicle_id","parent_eci"]}
                 ]
             }
         
@@ -51,6 +52,30 @@ ruleset trip_store{
         always{
             ent:long_trips := ent:long_trips.defaultsTo(clear_long_trip, "initialization was needed");
             ent:long_trips := ent:long_trips.append([long_trip]).klog("ent:long:trips: ")
+        }
+    }
+    
+    rule car_report{
+        select when explicit car_report parent_eci re#(.*)# setting (par_eci);
+        pre{
+            vehicle_id = event:attr("vehicle_id").klog("vehicle_id")
+            
+            trips = trips().klog("trips")
+        }
+        fired{
+            
+            event:send(
+                { "eci": par_eci, "eid": "car_report",
+                    "domain": "car", "type": "car_report_results",
+                    "attrs": { "report": trips.klog("report to send"), "vehicle_id": id}
+                })
+        }
+    }
+    
+    rule test{
+        select when car test
+        pre{
+            tmp = "testing".klog("test")
         }
     }
     

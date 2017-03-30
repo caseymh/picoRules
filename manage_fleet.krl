@@ -9,6 +9,7 @@ ruleset manage_fleet{
             "events": [ 
                 { "domain": "car", "type": "new_vehicle", "attrs": [ "vehicle_id" ]} 
                 , {"domain": "car", "type": "unneeded_vehicle", "attrs": [ "vehicle_id"]}
+                , {"domain": "car", "type": "fleet_report"}
                 , {"domain": "debug", "type": "clear"}
                 ]
             }
@@ -76,16 +77,9 @@ ruleset manage_fleet{
         cloud = function(eci, mod, func, params) {
             url = (cloud_url + eci+ "/" + mod + "/" +func).klog("url ");
             response = http:get(url, params).klog("response ");
- 
- 
-            status = response{"status_code"};
             
             contLen = response{"content_length"};
-            contLen > 0 => response{"content"}.decode()[0].klog("content") | []
- 
- 
-            //response_content = response{"content"}.decode().klog("content ")
-            //status eq "200"  => response_content | "{}"
+            contLen > 0 => response{"content"}.decode().klog("content") | []
         }
     }
     
@@ -144,6 +138,20 @@ ruleset manage_fleet{
                 attributes vehicle_to_delete;
             ent:vehicles{[id]} := null
         }
+    }
+    
+    rule create_report{
+        select when car fleet_report        
+        foreach ent:vehicles.keys() setting(key)
+        always{
+            vehicle = ent:vehicles{key.klog("key")}.klog("vehicle");
+            
+            event:send(
+                { "eci": vehicle.eci.klog("vehicle eci"), "eid": "trip_store",
+                    "domain": "explicit", "type": "car_report",
+                    "attrs": { "parent_eci": meta:eci.klog("parent eci"), "vehicle_id": key}
+                }).klog("send")
+        }       
     }
     
     
