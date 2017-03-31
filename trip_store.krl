@@ -56,27 +56,17 @@ ruleset trip_store{
     }
     
     rule car_report{
-        select when explicit car_report parent_eci re#(.*)# setting (par_eci);
+        select when car car_report parent_eci re#(.*)# setting (par_eci);
         pre{
-            vehicle_id = event:attr("vehicle_id").klog("vehicle_id")
-            
+            correlation_id = event:attr("correlation_id")
+            vehicle_id = event:attr("vehicle_id").klog("vehicle_id")            
             trips = trips().klog("trips")
-        }
-        fired{
-            
-            event:send(
-                { "eci": par_eci, "eid": "car_report",
-                    "domain": "car", "type": "car_report_results",
-                    "attrs": { "report": trips.klog("report to send"), "vehicle_id": id}
-                })
-        }
-    }
-    
-    rule test{
-        select when car test
-        pre{
-            tmp = "testing".klog("test")
-        }
+        }      
+        event:send(
+            { "eci": par_eci, "eid": "trip_store",
+                "domain": "car", "type": "car_report_created",
+                "attrs": { "report": trips.encode(), "vehicle_id": vehicle_id, "correlation_id": correlation_id}
+            }.klog("send"))  
     }
     
     rule clear_trips{
